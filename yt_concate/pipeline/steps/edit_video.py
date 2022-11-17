@@ -10,9 +10,16 @@ class EditVideo(Step):
     def process(self, data, inputs, utils):
         clips = []
         for found in data:
-            t_start, t_end = self.parse_caption_time(found.time)
-            video = VideoFileClip(found.yt.video_filepath).subclip(t_start, t_end)
-            clips.append(video)
+            if not utils.video_file_exists(found.yt):
+                continue
+            try:
+                t_start, t_end = self.parse_caption_time(found.time)
+                video = VideoFileClip(found.yt.video_filepath).subclip(t_start, t_end)
+                clips.append(video)
+            except OSError as e:
+                print('Found error:', e)
+                continue
+
             if len(clips) >= inputs['limit']:
                 print('Clip concatenation exceeds limit number, finish the process')
                 break
