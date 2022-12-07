@@ -14,6 +14,10 @@ class DownloadVideos(Step):
         yt_set = set([found.yt for found in data])
         print('Videos to download:', len(yt_set))
 
+        if len(os.listdir(VIDEOS_DIR)) > 30:
+            print('Enough videos, skip')
+            return data
+
         # # use single thread to download videos
         # for yt in yt_set:
         #     url = yt.url

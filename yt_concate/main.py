@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../')
+import getopt
 
 from yt_concate.pipeline.pipeline import Pipeline
 from yt_concate.pipeline.steps.preflight import Preflight
@@ -20,6 +23,26 @@ def main():
         'search_word': 'incredible',
         'limit': 20,
     }
+
+    # command line arguments
+    short_opts = 'hc:s:l:'
+    long_opts = 'help channel_id= search_word= limit='.split()
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], short_opts, long_opts)
+    except getopt.GetoptError:
+        print('python main.py test.py -c <channel_id> -s <search_word> -l <limit>')
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt == '-h':
+            print('python main.py test.py -c <channel_id> -s <search_word> -l <limit>')
+            sys.exit()
+        elif opt in ("-c", "--channel_id"):
+            inputs['channel_id'] = arg
+        elif opt in ("-s", "--search_word"):
+            inputs['search_word'] = arg
+        elif opt in ("-l", "--limit"):
+            inputs['limit'] = int(arg)
 
     steps = [
         Preflight(),
