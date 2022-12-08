@@ -31,6 +31,6 @@ class Utils:
         filepath = yt.video_filepath
         return os.path.exists(filepath) and os.path.getsize(filepath) > 0
 
-    def get_output_filepath(self, channel_id, search_word):
-        filename = channel_id + '_' + search_word + '.mp4'
+    def get_output_filepath(self, channel_id, search_word, limit):
+        filename = channel_id + '_' + search_word + '_' + str(limit) + '.mp4'
         return os.path.join(OUTPUTS_DIR, filename)

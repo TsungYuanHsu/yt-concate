@@ -4,18 +4,20 @@ from multiprocessing import Process
 from pytube import YouTube
 
 from .step import Step
+from yt_concate.define_logger import logger_new
 from .step import StepException
 
 
 class DownloadCaptions(Step):
     def process(self, data, inputs, utils):
+        logger_new.warning('In DownloadCaptions')
         start = time.time()
 
         # # use single thread to download captions
         # for yt in data:
-        #     print('Downloading caption for', yt.id)
+        #     logger_new.info(f'Downloading caption for {yt.id}')
         #     if utils.caption_file_exists(yt):
-        #         print(f'found existing file: {yt.url}')
+        #         logger_new.info(f'found existing file: {yt.url}')
         #         continue
         #
         #     try:
@@ -23,7 +25,7 @@ class DownloadCaptions(Step):
         #         en_caption = source.captions.get_by_language_code('a.en')
         #         en_caption_convert_to_srt = (en_caption.generate_srt_captions())
         #     except (KeyError, AttributeError):
-        #         print('Error when downloading caption for', yt.url)
+        #         logger_new.error(f'Error when downloading caption for {yt.url}')
         #         continue
         #
         #     text_file = open(yt.caption_filepath, "w", encoding='utf-8')
@@ -34,22 +36,22 @@ class DownloadCaptions(Step):
         self.activate_multiprocessing_captions(data, inputs, utils)
 
         end = time.time()
-        print('Multi-processing downloading captions takes', end - start, 'seconds')
+        logger_new.info(f'Multi-processing downloading captions takes {end - start} seconds')
 
         return data
 
     def download_captions(self, data, inputs, utils):
         for yt in data:
-            print('Downloading caption for', yt.id)
+            logger_new.info(f'Downloading caption for {yt.id}')
             if utils.caption_file_exists(yt):
-                print(f'found existing file: {yt.url}')
+                logger_new.info(f'found existing file: {yt.url}')
                 continue
             try:
                 source = YouTube(yt.url)
                 en_caption = source.captions.get_by_language_code('a.en')
                 en_caption_convert_to_srt = (en_caption.generate_srt_captions())
             except (KeyError, AttributeError):
-                print('Error when downloading caption for', yt.url)
+                logger_new.error(f'Error when downloading caption for {yt.url}')
                 continue
 
             text_file = open(yt.caption_filepath, "w", encoding='utf-8')
