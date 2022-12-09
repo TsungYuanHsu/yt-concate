@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'yt-concate-JH'
+NAME = 'yt-concate'
 DESCRIPTION = 'Produce a concatenated videos of clips that mentioned a word from youtube channel.'
 URL = 'https://github.com/TsungYuanHsu/yt-concate'
 EMAIL = 'specialline4107@gmail.com'
